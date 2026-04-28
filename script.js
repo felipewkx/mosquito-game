@@ -6,13 +6,20 @@ const startScreen = document.getElementById("start-screen");
 const slapSound = document.getElementById("slap-sound");
 const buzzSound = document.getElementById("buzz-sound");
 
+const handCursor = document.createElement("img");
+handCursor.src = "assets/mao.png";
+handCursor.id = "custom-cursor";
+handCursor.style.display = "none";
+document.body.appendChild(handCursor);
+
 let score = 0;
 let timeLeft = 30;
 let gameInterval;
 let moveInterval;
-let speed = 1000; // ms
+let speed = 1000;
+let isGameRunning = false;
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-// 1. Initialize High Scores
 updateLeaderboard();
 
 startBtn.addEventListener("click", startGame);
@@ -22,15 +29,16 @@ function startGame() {
   score = 0;
   timeLeft = 30;
   speed = 1000;
+  isGameRunning = true;
+
   scoreEl.innerText = score;
   timerEl.innerText = timeLeft;
-
   startScreen.style.display = "none";
-  buzzSound.play();
+  container.style.cursor = isMobile ? "default" : "none";
 
+  buzzSound.play();
   createMosquito();
 
-  // Countdown Timer
   gameInterval = setInterval(() => {
     timeLeft--;
     timerEl.innerText = timeLeft;
@@ -46,17 +54,23 @@ function createMosquito() {
 
   moveMosquito(mosquito);
 
-  mosquito.addEventListener("click", () => {
+  const handleHit = (e) => {
+    if (e.type === "touchstart") e.preventDefault();
+    if (mosquito.classList.contains("splat")) return;
+
     score++;
     scoreEl.innerText = score;
+    slapSound.currentTime = 0;
     slapSound.play();
 
-    // Show splat
     mosquito.src = "assets/splat.png";
     mosquito.classList.add("splat");
 
-    // Difficulty increase: move faster every 5 kills
-    if (score % 5 === 0 && speed > 400) speed -= 100;
+    if (score % 5 === 0 && speed > 400) {
+      speed -= 100;
+      clearInterval(moveInterval);
+      moveInterval = setInterval(() => moveMosquito(mosquito), speed);
+    }
 
     setTimeout(() => {
       if (timeLeft > 0) {
@@ -65,30 +79,31 @@ function createMosquito() {
         moveMosquito(mosquito);
       }
     }, 200);
-  });
+  };
 
-  // Auto-move mosquito if not clicked
+  mosquito.addEventListener("click", handleHit);
+  mosquito.addEventListener("touchstart", handleHit);
+
   moveInterval = setInterval(() => moveMosquito(mosquito), speed);
 }
 
 function moveMosquito(el) {
+  if (el.classList.contains("splat")) return;
   const maxX = container.clientWidth - 70;
   const maxY = container.clientHeight - 70;
-
-  const randomX = Math.floor(Math.random() * maxX);
-  const randomY = Math.floor(Math.random() * maxY);
-
-  el.style.left = `${randomX}px`;
-  el.style.top = `${randomY}px`;
+  el.style.left = `${Math.floor(Math.random() * maxX)}px`;
+  el.style.top = `${Math.floor(Math.random() * maxY)}px`;
 }
 
 function endGame(name) {
   clearInterval(gameInterval);
   clearInterval(moveInterval);
+  isGameRunning = false;
   buzzSound.pause();
+  handCursor.style.display = "none";
+  container.style.cursor = "default";
 
-  const allMosquitoes = document.querySelectorAll(".mosquito");
-  allMosquitoes.forEach((m) => m.remove());
+  document.querySelectorAll(".mosquito").forEach((m) => m.remove());
 
   saveScore(name, score);
   updateLeaderboard();
@@ -96,12 +111,29 @@ function endGame(name) {
   alert(`Game Over! ${name}, you killed ${score} mosquitoes!`);
 }
 
+window.addEventListener("mousemove", (e) => {
+  if (isGameRunning && !isMobile) {
+    handCursor.style.display = "block";
+    handCursor.style.left = `${e.clientX}px`;
+    handCursor.style.top = `${e.clientY}px`;
+  } else {
+    handCursor.style.display = "none";
+  }
+});
+
+window.addEventListener("mousedown", () => {
+  if (isGameRunning && !isMobile) handCursor.classList.add("slap-animation");
+});
+
+window.addEventListener("mouseup", () => {
+  handCursor.classList.remove("slap-animation");
+});
+
 function saveScore(name, score) {
   let scores = JSON.parse(localStorage.getItem("mosquitoRanks")) || [];
   scores.push({ name, score });
   scores.sort((a, b) => b.score - a.score);
-  scores = scores.slice(0, 5); // Keep top 5
-  localStorage.setItem("mosquitoRanks", JSON.stringify(scores));
+  localStorage.setItem("mosquitoRanks", JSON.stringify(scores.slice(0, 5)));
 }
 
 function updateLeaderboard() {

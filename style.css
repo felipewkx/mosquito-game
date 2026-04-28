@@ -11,9 +11,12 @@ body {
 }
 
 #game-container {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and 11 */
+  user-select: none;
+  /* Standard syntax */
   position: relative;
   width: 90vw;
   height: 80vh;
@@ -25,9 +28,12 @@ body {
 }
 
 #hud {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and 11 */
+  user-select: none;
+  /* Standard syntax */
   display: flex;
   justify-content: space-between;
   padding: 15px 30px;
@@ -39,9 +45,12 @@ body {
 }
 
 #start-screen {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and 11 */
+  user-select: none;
+  /* Standard syntax */
   position: absolute;
   inset: 0;
   background: rgba(44, 62, 80, 0.95);
@@ -78,12 +87,50 @@ button {
   position: absolute;
   width: 60px;
   height: 60px;
-  transition: all 0.4s ease-out; /* Smooth flying */
+  transition: all 0.4s ease-out;
+  /* Smooth flying */
   user-select: none;
   pointer-events: auto;
-  -webkit-user-drag: none; /* Prevents the ghost image when dragging */
+  -webkit-user-drag: none;
+  /* Prevents the ghost image when dragging */
 }
 
 .splat {
   pointer-events: none;
+}
+
+/* Esconde o cursor padrão dentro do container */
+#game-container {
+  /* Altere para cursor default ou auto */
+  cursor: auto;
+}
+
+
+/* Estilo do novo cursor (a mão) */
+#custom-cursor {
+  position: fixed;
+  width: 80px;
+  /* Ajuste o tamanho da mão aqui */
+  height: 80px;
+  pointer-events: none;
+  /* Importante: permite clicar no mosquito através da imagem */
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  /* Centraliza a imagem no bico do mouse */
+  transition: transform 0.1s ease-out;
+  /* Suaviza o movimento */
+  display: none;
+  /* Começa escondido */
+}
+
+/* Efeito de "tapa" ao clicar */
+#custom-cursor.slap-animation {
+  transform: translate(-50%, -50%) scale(0.8) rotate(-20deg);
+}
+
+@media (max-width: 600px) {
+  .mosquito {
+    width: 45px;
+    height: 45px;
+  }
 }
