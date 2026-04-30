@@ -21,6 +21,9 @@ body {
   width: 90vw;
   height: 80vh;
   background: #ecf0f1;
+  background-image: url('assets/bedroom.png');
+  background-size: cover;
+  background-position: center;
   border: 5px solid #bdc3c7;
   border-radius: 10px;
   cursor: crosshair;
@@ -85,15 +88,14 @@ button {
 
 .mosquito {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 66px;
+  height: 66px;
   transition: all 0.4s ease-out;
-  /* Smooth flying */
   user-select: none;
   pointer-events: auto;
   -webkit-user-drag: none;
-  /* Prevents the ghost image when dragging */
 }
+
 
 .splat {
   pointer-events: none;
@@ -109,19 +111,15 @@ button {
 /* Estilo do novo cursor (a mão) */
 #custom-cursor {
   position: fixed;
-  width: 80px;
-  /* Ajuste o tamanho da mão aqui */
-  height: 80px;
+  width: 60px;
+  height: 60px;
   pointer-events: none;
-  /* Importante: permite clicar no mosquito através da imagem */
   z-index: 9999;
   transform: translate(-50%, -50%);
-  /* Centraliza a imagem no bico do mouse */
   transition: transform 0.1s ease-out;
-  /* Suaviza o movimento */
   display: none;
-  /* Começa escondido */
 }
+
 
 /* Efeito de "tapa" ao clicar */
 #custom-cursor.slap-animation {
