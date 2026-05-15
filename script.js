@@ -24,6 +24,17 @@ updateLeaderboard();
 
 startBtn.addEventListener("click", startGame);
 
+// Seleciona o campo de texto do nome
+const playerNameInput = document.getElementById("player-name");
+
+// Escuta quando uma tecla é pressionada no campo de texto
+playerNameInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    startGame();
+  }
+});
+
+
 function startGame() {
   const name = document.getElementById("player-name").value || "Anonymous";
   score = 0;
@@ -37,6 +48,9 @@ function startGame() {
   container.style.cursor = isMobile ? "default" : "none";
 
   buzzSound.play();
+
+  // Remove mosquitos antigos que possam ter sobrado antes de criar um novo
+  document.querySelectorAll(".mosquito").forEach((m) => m.remove());
   createMosquito();
 
   gameInterval = setInterval(() => {
@@ -52,7 +66,21 @@ function createMosquito() {
   mosquito.className = "mosquito";
   container.appendChild(mosquito);
 
-  moveMosquito(mosquito);
+  // Função centralizada para mover o mosquito com segurança
+  function triggerMovement() {
+    clearInterval(moveInterval); // Limpa o timer anterior antes de criar um novo
+    if (!isGameRunning || mosquito.classList.contains("splat")) return;
+
+    moveMosquito(mosquito);
+
+    // Agenda o próximo movimento automático baseado na velocidade atual
+    moveInterval = setInterval(() => {
+      moveMosquito(mosquito);
+    }, speed);
+  }
+
+  // Primeiro movimento imediato ao nascer
+  triggerMovement();
 
   const handleHit = (e) => {
     if (e.type === "touchstart") e.preventDefault();
@@ -66,26 +94,26 @@ function createMosquito() {
     mosquito.src = "assets/splat.png";
     mosquito.classList.add("splat");
 
+    // Para o mosquito imediatamente para ele não fugir morto
+    clearInterval(moveInterval);
+
     if (score % 5 === 0 && speed > 400) {
       speed -= 100;
-      clearInterval(moveInterval);
-      moveInterval = setInterval(() => moveMosquito(mosquito), speed);
     }
 
     setTimeout(() => {
-      if (timeLeft > 0) {
+      if (timeLeft > 0 && isGameRunning) {
         mosquito.classList.remove("splat");
         mosquito.src = "assets/mosquito.png";
-        moveMosquito(mosquito);
+        triggerMovement(); // Renasce o mosquito limpando os tempos antigos
       }
     }, 200);
   };
 
   mosquito.addEventListener("click", handleHit);
   mosquito.addEventListener("touchstart", handleHit);
-
-  moveInterval = setInterval(() => moveMosquito(mosquito), speed);
 }
+
 
 function moveMosquito(el) {
   if (el.classList.contains("splat")) return;
