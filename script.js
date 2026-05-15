@@ -163,7 +163,9 @@ function endGame(name) {
   moveTimeouts.forEach(t => clearTimeout(t));
 
   clearInterval(gameInterval);
-  clearInterval(moveInterval);
+  // REMOVA OU COMENTE A LINHA ABAIXO:
+  // clearInterval(moveInterval); 
+
   isGameRunning = false;
 
   document.body.classList.remove("game-running");
@@ -181,6 +183,7 @@ function endGame(name) {
     alert(`Game Over! ${name}, você matou ${score} mosquitos!`);
   }, 50);
 }
+
 
 // Controle de rastreamento do cursor customizado
 window.addEventListener("pointermove", (e) => {
