@@ -1,7 +1,14 @@
+/* CORREÇÃO: Oculta o cursor em todo o body quando o jogo inicia */
+body.game-running,
+body.game-running #game-container {
+  cursor: none !important;
+}
+
 body {
+  cursor: auto;
   margin: 0;
   padding: 0;
-  font-family: "Arial", sans-serif;
+  font-family: Arial, sans-serif;
   background-color: #2c3e50;
   overflow: hidden;
   display: flex;
@@ -11,32 +18,21 @@ body {
 }
 
 #game-container {
-  -webkit-user-select: none;
-  /* Safari */
-  -ms-user-select: none;
-  /* IE 10 and 11 */
-  user-select: none;
-  /* Standard syntax */
   position: relative;
   width: 90vw;
   height: 80vh;
+  overflow: hidden;
   background: #ecf0f1;
-  background-image: url('assets/bedroom.png');
+  background-image: url("assets/bedroom.png");
   background-size: cover;
   background-position: center;
   border: 5px solid #bdc3c7;
   border-radius: 10px;
-  cursor: crosshair;
-  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 #hud {
-  -webkit-user-select: none;
-  /* Safari */
-  -ms-user-select: none;
-  /* IE 10 and 11 */
-  user-select: none;
-  /* Standard syntax */
   display: flex;
   justify-content: space-between;
   padding: 15px 30px;
@@ -45,15 +41,12 @@ body {
   color: #2c3e50;
   background: rgba(255, 255, 255, 0.8);
   pointer-events: none;
+  user-select: none;
+  position: relative;
+  z-index: 5;
 }
 
 #start-screen {
-  -webkit-user-select: none;
-  /* Safari */
-  -ms-user-select: none;
-  /* IE 10 and 11 */
-  user-select: none;
-  /* Standard syntax */
   position: absolute;
   inset: 0;
   background: rgba(44, 62, 80, 0.95);
@@ -63,6 +56,7 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 10;
+  user-select: none;
 }
 
 input,
@@ -70,14 +64,15 @@ button {
   padding: 10px 20px;
   margin: 10px;
   font-size: 18px;
-  border-radius: 5px;
   border: none;
+  border-radius: 5px;
 }
 
 button {
   background: #e74c3c;
   color: #ffee02;
   cursor: pointer;
+  font-weight: bold;
 }
 
 #rank-list {
@@ -90,40 +85,39 @@ button {
   position: absolute;
   width: 66px;
   height: 66px;
-  transition: all 0.4s ease-out;
+  /* Movimento suave do mosquito ao mudar de posição */
+  transition: left 0.25s ease-out, top 0.25s ease-out;
   user-select: none;
-  pointer-events: auto;
   -webkit-user-drag: none;
+  pointer-events: auto;
+  cursor: none;
 }
-
 
 .splat {
   pointer-events: none;
 }
 
-/* Esconde o cursor padrão dentro do container */
-#game-container {
-  /* Altere para cursor default ou auto */
-  cursor: auto;
-}
-
-
-/* Estilo do novo cursor (a mão) */
+/* CORREÇÃO: Removida a transição de movimento para eliminar o lag de rastreamento do mouse */
 #custom-cursor {
   position: fixed;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: auto;
+  left: 0;
+  top: 0;
+  z-index: 999999;
   pointer-events: none;
-  z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: transform 0.1s ease-out;
   display: none;
 }
 
-
-/* Efeito de "tapa" ao clicar */
+/* Animação do tapa ajustada para melhor rotação e escala no clique */
 #custom-cursor.slap-animation {
-  transform: translate(-50%, -50%) scale(0.8) rotate(-20deg);
+  transform: translate(-50%, -50%) scale(0.7) rotate(-25deg);
+}
+
+#start-screen input,
+#start-screen button {
+  cursor: auto !important;
 }
 
 @media (max-width: 600px) {

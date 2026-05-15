@@ -1,37 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mosquito Hunter Pro</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="game-container">
-      <div id="hud">
-        <div>Score: <span id="score">0</span></div>
-        <div>Time: <span id="timer">30</span>s</div>
-      </div>
 
-      <div id="start-screen">
-        <h1>Mosquito Hunter</h1>
-        <input
-          type="text"
-          id="player-name"
-          placeholder="Enter Your Name"
-          maxlength="10"
-        />
-        <button id="start-btn">Start Game</button>
-        <div id="leaderboard">
-          <h3>Top Hunters</h3>
-          <ul id="rank-list"></ul>
-        </div>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mosquito Hunter Pro</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="game-container">
+    <!-- HUD de Pontuação e Tempo -->
+    <div id="hud">
+      <div>Score: <span id="score">0</span></div>
+      <div>Time: <span id="timer">30</span>s</div>
     </div>
 
-    <audio id="slap-sound" src="assets/slap.mp3"></audio>
-    <audio id="buzz-sound" src="assets/buzz.mp3" loop></audio>
+    <!-- Tela Inicial e Placar de Líderes -->
+    <div id="start-screen">
+      <h1>Mosquito Hunter</h1>
+      <input type="text" id="player-name" placeholder="Enter Your Name" maxlength="10" autocomplete="off" />
+      <button id="start-btn">Start Game</button>
 
-    <script src="script.js"></script>
-  </body>
+      <div id="leaderboard">
+        <h3>Top Hunters</h3>
+        <ul id="rank-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Elementos de Áudio -->
+  <audio id="slap-sound" src="assets/slap.mp3" preload="auto"></audio>
+  <audio id="buzz-sound" src="assets/buzz.mp3" loop preload="auto"></audio>
+
+  <!-- Script Principal -->
+  <script src="script.js"></script>
+</body>
+
 </html>
