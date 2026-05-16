@@ -83,10 +83,12 @@ button {
 
 .mosquito {
   position: absolute;
-  width: 66px;
-  height: 66px;
+  width: 99px;
+  height: 99px;
   /* Movimento suave do mosquito ao mudar de posição */
-  transition: left 0.25s ease-out, top 0.25s ease-out;
+  transition:
+    left 0.25s ease-out,
+    top 0.25s ease-out;
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: auto;

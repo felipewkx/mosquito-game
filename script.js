@@ -32,11 +32,8 @@ let moveTimeouts = [];
 // Definição das cores via filtro CSS (Original, Vermelho, Verde, Roxo)
 const mosquitoStyles = [
   { filter: "none" },
-  { filter: "hue-rotate(120deg) saturate(2)" }, // Verde
-  { filter: "hue-rotate(190deg) saturate(2.5)" }, // Roxo
-  { filter: "hue-rotate(340deg) saturate(2.5)" } // Vermelho
+  { filter: "hue-rotate(340deg) saturate(2.5)" }, // Vermelho
 ];
-
 
 const isMobile = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
@@ -69,11 +66,11 @@ function startGame() {
   // Limpa tudo antes de começar
   document.querySelectorAll(".mosquito").forEach((m) => m.remove());
   activeMosquitos = [];
-  moveTimeouts.forEach(t => clearTimeout(t));
+  moveTimeouts.forEach((t) => clearTimeout(t));
   moveTimeouts = [];
 
-  // CORREÇÃO: Nasce os 4 mosquitos simultaneamente, cada um com uma cor
-  for (let i = 0; i < 4; i++) {
+  // CORREÇÃO: Nascem mosquitos simultaneamente, cada um com uma cor
+  for (let i = 0; i < mosquitoStyles.length; i++) {
     createMosquito(i);
   }
 
@@ -160,11 +157,11 @@ function moveMosquito(el) {
 }
 
 function endGame(name) {
-  moveTimeouts.forEach(t => clearTimeout(t));
+  moveTimeouts.forEach((t) => clearTimeout(t));
 
   clearInterval(gameInterval);
   // REMOVA OU COMENTE A LINHA ABAIXO:
-  // clearInterval(moveInterval); 
+  // clearInterval(moveInterval);
 
   isGameRunning = false;
 
@@ -183,7 +180,6 @@ function endGame(name) {
     alert(`Game Over! ${name}, você matou ${score} mosquitos!`);
   }, 50);
 }
-
 
 // Controle de rastreamento do cursor customizado
 window.addEventListener("pointermove", (e) => {
@@ -228,7 +224,5 @@ function updateLeaderboard() {
   if (!list) return; // Evita quebra se o elemento não existir na tela atual
 
   const scores = JSON.parse(localStorage.getItem("mosquitoRanks")) || [];
-  list.innerHTML = scores
-    .map((s) => `<li>${s.name}: ${s.score}</li>`)
-    .join("");
+  list.innerHTML = scores.map((s) => `<li>${s.name}: ${s.score}</li>`).join("");
 }
