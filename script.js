@@ -38,6 +38,9 @@ const mosquitoStyle = {
 const isMobile =
   'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+// Tamanho do mosquito (99px * 1.25 = 123.75 ≈ 124px desktop, 67px * 1.25 = 83.75 ≈ 84px mobile)
+const MOSQUITO_SIZE = isMobile ? 84 : 124;
+
 updateLeaderboard();
 
 startBtn.addEventListener('click', startGame);
@@ -111,7 +114,7 @@ function createMosquito() {
 
   container.appendChild(mosquito);
 
-  const size = 66;
+  const size = MOSQUITO_SIZE;
 
   // NASCE FORA DA TELA
   const side = Math.floor(Math.random() * 4);
@@ -156,58 +159,73 @@ function createMosquito() {
     moveMosquito(mosquito);
   }, 20);
 
-  const handleHit = (e) => {
-    e.preventDefault();
-
-    if (mosquito.classList.contains('splat')) return;
-
-    const rect = mosquito.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-
-    const exactX = rect.left - containerRect.left;
-    const exactY = rect.top - containerRect.top;
-
-    mosquito.classList.add('splat');
-
-    mosquito.style.transition = 'none';
-
-    mosquito.style.left = `${exactX}px`;
-    mosquito.style.top = `${exactY}px`;
-
-    clearTimeout(moveTimeout);
-
-    score++;
-
-    scoreEl.innerText = score;
-
-    slapSound.currentTime = 0;
-    slapSound.play();
-
-    mosquito.src = 'assets/splat.png';
-
-    mosquito.style.filter = 'none';
-
-    // jogo fica MAIS DIFÍCIL
-    if (speed > 90) {
-      speed -= 8;
-    }
-
-    setTimeout(() => {
-      mosquito.remove();
-
-      if (isGameRunning && timeLeft > 0) {
-        createMosquito();
-      }
-    }, 250);
-  };
-
   mosquito.addEventListener('pointerdown', handleHit);
 }
+
+function handleHit(e) {
+  e.preventDefault();
+
+  if (!mosquito || mosquito.classList.contains('splat')) return;
+
+  const rect = mosquito.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+
+  const exactX = rect.left - containerRect.left;
+  const exactY = rect.top - containerRect.top;
+
+  mosquito.classList.add('splat');
+
+  mosquito.style.transition = 'none';
+
+  mosquito.style.left = `${exactX}px`;
+  mosquito.style.top = `${exactY}px`;
+
+  clearTimeout(moveTimeout);
+
+  score++;
+
+  scoreEl.innerText = score;
+
+  slapSound.currentTime = 0;
+  slapSound.play();
+
+  mosquito.src = 'assets/splat.png';
+
+  mosquito.style.filter = 'none';
+
+  // jogo fica MAIS DIFÍCIL
+  if (speed > 90) {
+    speed -= 8;
+  }
+
+  setTimeout(() => {
+    mosquito.remove();
+
+    if (isGameRunning && timeLeft > 0) {
+      createMosquito();
+    }
+  }, 250);
+}
+
+// Detecção de clique robusta: verifica se o clique está dentro da área do mosquito
+// mesmo quando ele está em movimento rápido (fallback para o pointerdown do elemento)
+container.addEventListener('pointerdown', (e) => {
+  if (!isGameRunning || !mosquito || mosquito.classList.contains('splat')) return;
+
+  const rect = mosquito.getBoundingClientRect();
+
+  if (
+    e.clientX >= rect.left && e.clientX <= rect.right &&
+    e.clientY >= rect.top && e.clientY <= rect.bottom
+  ) {
+    handleHit(e);
+  }
+});
 
 function moveMosquito(el) {
   if (!isGameRunning || !el || el.classList.contains('splat')) return;
 
-  const size = el.offsetWidth || 66;
+  const size = el.offsetWidth || MOSQUITO_SIZE;
 
   const barraAltura = 60;
 

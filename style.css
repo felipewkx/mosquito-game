@@ -83,8 +83,8 @@ button {
 
 .mosquito {
   position: absolute;
-  width: 99px;
-  height: 99px;
+  width: 124px;
+  height: 124px;
   /* Movimento suave do mosquito ao mudar de posição */
   transition:
     left 0.25s ease-out,
@@ -93,10 +93,12 @@ button {
   -webkit-user-drag: none;
   pointer-events: auto;
   cursor: none;
+  object-fit: contain;
 }
 
 .splat {
   pointer-events: none;
+  object-fit: contain;
 }
 
 /* CORREÇÃO: Removida a transição de movimento para eliminar o lag de rastreamento do mouse */
@@ -124,7 +126,7 @@ button {
 
 @media (max-width: 600px) {
   .mosquito {
-    width: 67px;
-    height: 67px;
+    width: 84px;
+    height: 84px;
   }
 }
