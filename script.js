@@ -162,6 +162,36 @@ function createMosquito() {
   mosquito.addEventListener('pointerdown', handleHit);
 }
 
+function spawnParticles(x, y) {
+  const particles = [
+    '✨', '💥', '⭐', '💫', '🎉', '💜', '🌟'
+  ];
+
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = particles[Math.floor(Math.random() * particles.length)];
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 50 + Math.random() * 60;
+      p.style.left = `${x + Math.cos(angle) * dist}px`;
+      p.style.top = `${y + Math.sin(angle) * dist}px`;
+      container.appendChild(p);
+      setTimeout(() => p.remove(), 800);
+    }, i * 30);
+  }
+}
+
+function showScorePopup(x, y) {
+  const pop = document.createElement('div');
+  pop.className = 'score-pop';
+  pop.textContent = '👍 +1';
+  pop.style.left = `${x}px`;
+  pop.style.top = `${y}px`;
+  container.appendChild(pop);
+  setTimeout(() => pop.remove(), 900);
+}
+
 function handleHit(e) {
   e.preventDefault();
 
@@ -185,6 +215,10 @@ function handleHit(e) {
   score++;
 
   scoreEl.innerText = score;
+
+  // Fun visual feedback
+  spawnParticles(exactX + MOSQUITO_SIZE / 2, exactY + MOSQUITO_SIZE / 2);
+  showScorePopup(exactX + MOSQUITO_SIZE / 2, exactY);
 
   slapSound.currentTime = 0;
   slapSound.play();

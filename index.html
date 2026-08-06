@@ -3,22 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mosquito Hunter Pro</title>
+    <title>🦟 Mosquito Smash! 🎯</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <div id="game-container">
+      <!-- Decorative floating clouds -->
+      <div class="cloud cloud-1">☁️</div>
+      <div class="cloud cloud-2">☁️</div>
+      <div class="cloud cloud-3">☁️</div>
+
+      <!-- Decorative sun -->
+      <div class="sun">🌞</div>
+
+      <!-- Decorative grass at bottom -->
+      <div class="grass"></div>
+
       <!-- HUD de Pontuação e Tempo -->
       <div id="hud">
-        <div>Score: <span id="score">0</span></div>
-        <div>Time: <span id="timer">30</span>s</div>
+        <div class="hud-badge score-badge">⭐ Score: <span id="score">0</span></div>
+        <div class="hud-badge timer-badge">⏰ Time: <span id="timer">30</span>s</div>
       </div>
 
       <!-- Tela Inicial e Placar de Líderes -->
       <div id="start-screen">
-        <h1>Mosquito Hunter</h1>
+        <h1 class="game-title">🦟 Mosquito Smash! 🎯</h1>
+        <p class="tagline">Smash those pesky bugs! 💥</p>
         <input
           type="text"
           id="player-name"
@@ -26,13 +44,16 @@
           maxlength="10"
           autocomplete="off"
         />
-        <button id="start-btn">Start Game</button>
+        <button id="start-btn">🚀 Start Game!</button>
 
         <div id="leaderboard">
-          <h3>Top Hunters</h3>
+          <h3>🏆 Top Hunters</h3>
           <ul id="rank-list"></ul>
         </div>
       </div>
+
+      <!-- Particle effects container -->
+      <div id="particles"></div>
     </div>
 
     <!-- Elementos de Áudio -->

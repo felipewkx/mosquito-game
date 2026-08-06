@@ -1,6 +1,9 @@
-/* CORREÇÃO: Oculta o cursor em todo o body quando o jogo inicia */
-body.game-running,
-body.game-running #game-container {
+/* ============================================
+   MOSQUITO SMASH! - Kid-Friendly Theme v2
+   ============================================ */
+
+/* Hide cursor during game */
+body.game-running, body.game-running #game-container {
   cursor: none !important;
 }
 
@@ -8,8 +11,8 @@ body {
   cursor: auto;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #2c3e50;
+  font-family: 'Baloo 2', 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -22,34 +25,101 @@ body {
   width: 90vw;
   height: 80vh;
   overflow: hidden;
-  background: #ecf0f1;
-  background-image: url("assets/bedroom.png");
-  background-size: cover;
-  background-position: center;
-  border: 5px solid #bdc3c7;
-  border-radius: 10px;
+  background: #87ceeb url("assets/bedroom.png") center / cover;
+  border: 8px solid #ff6b6b;
+  border-radius: 30px;
+  box-shadow: 0 0 0 4px #ffd93d, 0 0 0 8px #6bcb77, 0 20px 60px rgba(0,0,0,0.4);
   user-select: none;
   -webkit-user-select: none;
 }
 
+/* ---- Decorative elements ---- */
+.cloud {
+  position: absolute;
+  font-size: 60px;
+  opacity: 0.7;
+  z-index: 1;
+  pointer-events: none;
+  animation: floatCloud 25s linear infinite;
+}
+.cloud-2 { font-size: 45px; animation-duration: 35s; animation-delay: -10s; top: 25%; }
+.cloud-3 { font-size: 35px; animation-duration: 30s; animation-delay: -20s; top: 5%; }
+.cloud-1 { top: 10%; }
+
+@keyframes floatCloud {
+  from { transform: translateX(0); }
+  to { transform: translateX(110vw); }
+}
+
+.sun {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 70px;
+  z-index: 1;
+  pointer-events: none;
+  animation: sunPulse 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255,215,0,0.8));
+}
+
+@keyframes sunPulse {
+  0%, 100% { transform: scale(1) rotate(0); }
+  50% { transform: scale(1.15) rotate(15deg); }
+}
+
+.grass {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35px;
+  background: linear-gradient(to top, #2d8a4e, #4caf50, #81c784);
+  border-top: 4px solid #66bb6a;
+  z-index: 1;
+  pointer-events: none;
+}
+.grass::before {
+  content: "🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱";
+  font-size: 22px;
+  line-height: 35px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* ---- HUD ---- */
 #hud {
   display: flex;
   justify-content: space-between;
-  padding: 15px 30px;
+  padding: 12px 24px;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 700;
   color: #2c3e50;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(5px);
   pointer-events: none;
   user-select: none;
   position: relative;
   z-index: 5;
+  border-bottom: 4px dashed #ffd93d;
 }
 
+.hud-badge {
+  background: linear-gradient(135deg, #ffd93d, #ff9a3d);
+  border-radius: 20px;
+  padding: 6px 20px;
+  color: #5b2a86;
+  box-shadow: 0 4px 10px rgba(255,157,0,0.4);
+  animation: badgeBob 2s ease-in-out infinite;
+}
+
+.timer-badge { background: linear-gradient(135deg, #6bcb77, #a8e6cf); }
+@keyframes badgeBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* ---- Start screen ---- */
 #start-screen {
   position: absolute;
   inset: 0;
-  background: rgba(44, 62, 80, 0.95);
+  background: linear-gradient(160deg, rgba(91,42,134,0.95), rgba(139,74,186,0.95), rgba(255,111,145,0.95));
   color: white;
   display: flex;
   flex-direction: column;
@@ -57,51 +127,112 @@ body {
   align-items: center;
   z-index: 10;
   user-select: none;
+  font-size: 1.3em;
 }
 
-input,
-button {
-  padding: 10px 20px;
+.game-title {
+  font-size: 4.5em;
+  margin: 0;
+  text-shadow: 3px 3px 0 #ff6b6b, 6px 6px 0 #ffd93d, 9px 9px 20px rgba(0,0,0,0.3);
+  animation: titleWiggle 2.5s ease-in-out infinite;
+}
+
+@keyframes titleWiggle {
+  0%, 100% { transform: rotate(-3deg) scale(1); }
+  50% { transform: rotate(3deg) scale(1.05); }
+}
+
+.tagline {
+  font-size: 1.5em;
+  margin: 10px 0 20px;
+  color: #ffd93d;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+input, button {
+  padding: 14px 28px;
   margin: 10px;
-  font-size: 18px;
+  font-size: 20px;
+  font-family: inherit;
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
+  outline: none;
 }
 
-button {
-  background: #e74c3c;
-  color: #ffee02;
-  cursor: pointer;
-  font-weight: bold;
+input {
+  background: #fff;
+  color: #5b2a86;
+  width: 280px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
+input:focus { transform: scale(1.05); box-shadow: 0 6px 20px rgba(255,217,61,0.6); }
+
+button {
+  background: linear-gradient(135deg, #ff6b6b, #ff9a3d);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 22px;
+  box-shadow: 0 6px 15px rgba(255,107,107,0.5);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+button:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 25px rgba(255,107,107,0.7); }
+button:active { transform: scale(0.95); }
+
+#leaderboard {
+  margin-top: 25px;
+  padding: 15px 30px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  border: 3px solid #ffd93d;
+  max-width: 320px;
+  width: 90%;
+}
+#leaderboard h3 { margin: 0 0 10px; color: #ffd93d; text-align: center; font-size: 1.4em; }
 
 #rank-list {
   list-style: none;
   padding: 0;
-  text-align: left;
+  margin: 0;
+  text-align: center;
 }
+#rank-list li {
+  padding: 5px 0;
+  font-size: 1.1em;
+  border-bottom: 1px dashed rgba(255,255,255,0.3);
+}
+#rank-list li:last-child { border-bottom: none; }
+#rank-list li:first-child { color: #ffd93d; font-weight: 800; font-size: 1.3em; }
 
+/* ---- Game elements ---- */
 .mosquito {
   position: absolute;
   width: 124px;
   height: 124px;
-  /* Movimento suave do mosquito ao mudar de posição */
-  transition:
-    left 0.25s ease-out,
-    top 0.25s ease-out;
+  transition: left 0.25s ease-out, top 0.25s ease-out;
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: auto;
   cursor: none;
   object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  z-index: 2;
 }
 
 .splat {
   pointer-events: none;
   object-fit: contain;
+  animation: splatPop 0.3s ease-out;
 }
 
-/* CORREÇÃO: Removida a transição de movimento para eliminar o lag de rastreamento do mouse */
+@keyframes splatPop {
+  0% { transform: scale(0.3) rotate(-10deg); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 1; }
+}
+
+/* Custom cursor */
 #custom-cursor {
   position: fixed;
   width: 80px;
@@ -114,19 +245,52 @@ button {
   display: none;
 }
 
-/* Animação do tapa ajustada para melhor rotação e escala no clique */
 #custom-cursor.slap-animation {
   transform: translate(-50%, -50%) scale(0.7) rotate(-25deg);
 }
 
-#start-screen input,
-#start-screen button {
-  cursor: auto !important;
+#start-screen input, #start-screen button { cursor: auto !important; }
+
+/* ---- Particles ---- */
+#particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  font-size: 24px;
+  pointer-events: none;
+  animation: particleFly 0.8s ease-out forwards;
+}
+@keyframes particleFly {
+  0% { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
 }
 
+/* ---- Score popup ---- */
+.score-pop {
+  position: absolute;
+  font-size: 36px;
+  font-weight: 800;
+  color: #ffd93d;
+  text-shadow: 2px 2px 0 #ff6b6b, 0 0 15px rgba(255,217,61,0.8);
+  z-index: 7;
+  pointer-events: none;
+  animation: popUp 0.9s ease-out forwards;
+}
+@keyframes popUp {
+  0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+  100% { transform: translate(-50%, -180%) scale(1.5); opacity: 0; }
+}
+
+/* ---- Responsive ---- */
 @media (max-width: 600px) {
-  .mosquito {
-    width: 84px;
-    height: 84px;
-  }
+  .mosquito { width: 84px; height: 84px; }
+  .game-title { font-size: 2.8em; }
+  #hud { font-size: 18px; padding: 8px 12px; }
+  .hud-badge { padding: 4px 12px; }
+  input { width: 210px; }
 }
