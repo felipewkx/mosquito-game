@@ -6,6 +6,7 @@ const startScreen = document.getElementById('start-screen');
 const slapSound = document.getElementById('slap-sound');
 const buzzSound = document.getElementById('buzz-sound');
 const playerNameInput = document.getElementById('player-name');
+const gameOverMessageEl = document.getElementById('game-over-message');
 
 // Som contínuo
 buzzSound.loop = true;
@@ -41,6 +42,43 @@ const isMobile =
 // Tamanho do mosquito (99px * 1.25 = 123.75 ≈ 124px desktop, 67px * 1.25 = 83.75 ≈ 84px mobile)
 const MOSQUITO_SIZE = isMobile ? 84 : 124;
 
+// Hitbox is 12% larger than the mosquito's visual size so that
+// clicks/taps very close to the fast-moving mosquito register as hits.
+const HITBOX_SCALE = 1.12;
+
+/**
+ * Get the enlarged hitbox rect for the mosquito, centered on it,
+ * so near-misses still register as hits. The hitbox follows the
+ * mosquito since it's derived from its live bounding rect.
+ */
+function getHitboxRect(mosquitoEl) {
+  const rect = mosquitoEl.getBoundingClientRect();
+  const w = rect.width * HITBOX_SCALE;
+  const h = rect.height * HITBOX_SCALE;
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  return {
+    left: cx - w / 2,
+    right: cx + w / 2,
+    top: cy - h / 2,
+    bottom: cy + h / 2,
+  };
+}
+
+/**
+ * Returns true if a pointer event falls inside the enlarged hitbox.
+ * Used as a shared check for both mouse and touch.
+ */
+function isHit(e) {
+  const rect = getHitboxRect(mosquito);
+  return (
+    e.clientX >= rect.left &&
+    e.clientX <= rect.right &&
+    e.clientY >= rect.top &&
+    e.clientY <= rect.bottom
+  );
+}
+
 updateLeaderboard();
 
 startBtn.addEventListener('click', startGame);
@@ -66,6 +104,8 @@ function startGame() {
 
   scoreEl.innerText = score;
   timerEl.innerText = timeLeft;
+
+  gameOverMessageEl.textContent = '';
 
   startScreen.style.display = 'none';
 
@@ -241,17 +281,12 @@ function handleHit(e) {
   }, 250);
 }
 
-// Detecção de clique robusta: verifica se o clique está dentro da área do mosquito
-// mesmo quando ele está em movimento rápido (fallback para o pointerdown do elemento)
+// Detecção de clique robusta: verifica se o clique está dentro do hitbox
+// ampliado do mosquito — funciona para mouse e touch (via pointer events).
 container.addEventListener('pointerdown', (e) => {
   if (!isGameRunning || !mosquito || mosquito.classList.contains('splat')) return;
 
-  const rect = mosquito.getBoundingClientRect();
-
-  if (
-    e.clientX >= rect.left && e.clientX <= rect.right &&
-    e.clientY >= rect.top && e.clientY <= rect.bottom
-  ) {
+  if (isHit(e)) {
     handleHit(e);
   }
 });
@@ -309,13 +344,9 @@ function endGame(name) {
 
   updateLeaderboard();
 
-  startScreen.style.display = 'flex';
+  gameOverMessageEl.textContent = `Game Over! ${name}, you smashed ${score} mosquitoes! 🎉`;
 
-  setTimeout(() => {
-    alert(
-      `Game Over! ${name}, você matou ${score} mosquitos!`
-    );
-  }, 50);
+  startScreen.style.display = 'flex';
 }
 
 // Cursor customizado
