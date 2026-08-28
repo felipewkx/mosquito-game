@@ -25,7 +25,7 @@ splatPreload.src = 'assets/splat.png';
 let score = 0;
 let timeLeft = 30;
 let gameInterval;
-let speed = 200; // mosquito MUITO rápido
+let speed = 150; // mosquito MUITO rápido
 let isGameRunning = false;
 
 let mosquito = null;
@@ -40,7 +40,7 @@ const isMobile =
   'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 // Tamanho do mosquito (99px * 1.25 = 123.75 ≈ 124px desktop, 67px * 1.25 = 83.75 ≈ 84px mobile)
-const MOSQUITO_SIZE = isMobile ? 84 : 124;
+const MOSQUITO_SIZE = isMobile ? 109 : 161;
 
 // Hitbox is 12% larger than the mosquito's visual size so that
 // clicks/taps very close to the fast-moving mosquito register as hits.
